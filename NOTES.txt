@@ -1,0 +1,16 @@
+
+
+#ORDER TABLE:
+Order table:
+Make an Order table
+RelationShip:
+User-Order: 1 to Many
+Order-Transaction: 1 to Many
+
+But then Transaction should have Order_id as a foreign key
+
+
+Another approach:
+Instead of Transaction use Order table and a Pivot table: order_product
+
+

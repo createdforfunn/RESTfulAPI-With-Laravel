@@ -45,14 +45,35 @@ class User extends Authenticatable
     ];
 
 
+    // Mutator
+    public function setNameAttribute($name)
+    {
+        $this->attributes['name'] = strtolower($name);
+    }
+
+    // Accessor
+    public function getNameAttribute($name)
+    {
+        return ucwords($name);
+    }
+
+    // Mutator
+    public function setEmailAttribute($email)
+    {
+        $this->attributes['email'] = strtolower($email);
+    }
+
+
     public function isVerified()
     {
         return $this->verified == User::VERIFIED_USER;
     }
+
     public function isAdmin()
     {
         return $this->admin == User::ADMIN_USER;
     }
+
     public static function generateVerificationCode()
     {
         return str_random(40);

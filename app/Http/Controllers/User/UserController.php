@@ -4,12 +4,12 @@ namespace App\Http\Controllers\User;
 
 use App\User;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\ApiController;
 
 
 // todo: handle errors and exceptions.
 
-class UserController extends Controller
+class UserController extends ApiController
 {
     /**
      * Display a listing of the resource.
@@ -20,7 +20,7 @@ class UserController extends Controller
     {
         $users = User::all();
 
-        return response()->json(['data' => $users], 200);
+        return $this->showAll($users);
         // return $users;
     }
 
@@ -50,7 +50,7 @@ class UserController extends Controller
         $data['admin'] = User::REGULAR_USER;
         $user = User::create($data);
 
-        return response()->json(['data' => $user], 201);      // 201 = created
+        return $this->showOne($user, 201);
     }
 
     /**
@@ -62,7 +62,7 @@ class UserController extends Controller
     public function show($id)
     {
         $user = User::findOrFail($id);
-        return response()->json(['data' => $user], 200);
+        return $this->showOne($user);
     }
 
 
@@ -109,19 +109,19 @@ class UserController extends Controller
 
         if ($request->has('admin')) {             // 409 = conflict
             if (!$user->isVerified()) {
-                return response()->json(['error' => 'Only verified users can modify the admin field', 'code' => 409], 409);
+                return $this->errorResponse('Only verified users can modify the admin field', 409);
             }
             $user->admin = $request->admin;
         }
 
 
         if (!$user->isDirty()) {                      // 422 = Unprocessable Entity
-            return response()->json(['error' => 'You need to specify a different value to update', 'code' => 422], 422);
+            return $this->errorResponse('You need to specify a different value to update', 422);
         }
 
 
         $user->save();
-        return response()->json(['data' => $user], 200);
+        return $this->showOne($user);
     }
 
     /**
@@ -136,6 +136,6 @@ class UserController extends Controller
 
         $user->delete();
 
-        return response()->json(['data' => $user], 200);
+        return $this->showOne($user);
     }
 }

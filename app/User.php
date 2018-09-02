@@ -2,12 +2,13 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
-    use Notifiable;
+    use Notifiable, SoftDeletes;
 
 
     const VERIFIED_USER = '1';
@@ -18,6 +19,7 @@ class User extends Authenticatable
 
     protected $table = 'users';        //  now Buyer an Seller models will use this table and wont create new table
 
+    protected $dates = ['deleted_at'];
 
     /**
      * The attributes that are mass assignable.

@@ -11,6 +11,7 @@ use App\Http\Controllers\ApiController;
 
 class UserController extends ApiController
 {
+
     /**
      * Display a listing of the resource.
      *
@@ -23,7 +24,6 @@ class UserController extends ApiController
         return $this->showAll($users);
         // return $users;
     }
-
 
 
     /**
@@ -53,18 +53,17 @@ class UserController extends ApiController
         return $this->showOne($user, 201);
     }
 
+
     /**
      * Display the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(User $user)
     {
-        $user = User::findOrFail($id);
         return $this->showOne($user);
     }
-
 
 
     /**
@@ -74,10 +73,9 @@ class UserController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, User $user)
     {
 
-        $user = User::findOrFail($id);
 
         $rules = [
             'email' => 'email|unique:users,email,' . $user->id,        // explain
@@ -124,15 +122,15 @@ class UserController extends ApiController
         return $this->showOne($user);
     }
 
+
     /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(User $user)
     {
-        $user = User::findOrFail($id);
 
         $user->delete();
 

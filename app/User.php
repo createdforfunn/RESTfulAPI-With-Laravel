@@ -2,9 +2,12 @@
 
 namespace App;
 
+use App\Mail\UserCreated;
+use App\Mail\UserMailChanged;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\Mail;
 
 class User extends Authenticatable
 {
@@ -80,4 +83,39 @@ class User extends Authenticatable
     {
         return str_random(40);
     }
+
+
+    // Handling the model event by event observer approach.  // also learn event queueing
+    public static function boot()
+    {
+        parent::boot();
+
+        // Register an created model event with the dispatcher.
+        parent::created(function($user) {
+
+            // Mail::to($user)->send(new UserCreated($user)); // same as: Mail::to($user->email)->send(new UserCreated($user));
+
+            retry(5, function() use ($user) {
+                Mail::to($user)->send(new UserCreated($user));
+            }, 100);
+
+        });
+
+
+
+        parent::updated(function($user) {
+            if ($user->isDirty('email')) {
+
+                //Mail::to($user)->send(new UserMailChanged($user));
+
+                retry(5, function() use ($user) {
+                    Mail::to($user)->send(new UserMailChanged($user));
+                }, 100);
+
+            }
+        });
+
+
+    }
+
 }

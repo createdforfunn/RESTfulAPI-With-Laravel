@@ -49,4 +49,20 @@ class Product extends Model
     {
         return $this->belongsToMany(Category::class);
     }
+
+
+
+    // Handling the model event by event observer approach.  // learn event queueing
+    public static function boot()
+    {
+        parent::boot();
+
+        // Register an updating model event with the dispatcher.
+        parent::updating(function ($product) {
+
+            if ($product->quantity == 0 && $product->isAvailable()) {
+                $product->status = self::UNAVAILABLE_PRODUCT;
+            }
+        });
+    }
 }

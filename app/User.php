@@ -4,6 +4,7 @@ namespace App;
 
 use App\Mail\UserCreated;
 use App\Mail\UserMailChanged;
+use App\Transformers\UserTransformer;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -19,6 +20,9 @@ class User extends Authenticatable
 
     const ADMIN_USER = 'true';
     const REGULAR_USER = 'false';
+
+    public $transformer = UserTransformer::class;
+
 
     protected $table = 'users';        //  now Buyer an Seller models will use this table and wont create new table
 

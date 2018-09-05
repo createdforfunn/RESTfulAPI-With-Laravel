@@ -147,9 +147,13 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
 
+
         /*
          * Package Service Providers...
          */
+        Spatie\Fractal\FractalServiceProvider::class,
+
+
 
         /*
          * Application Service Providers...

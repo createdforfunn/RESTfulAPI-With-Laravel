@@ -13,6 +13,7 @@ class BuyerController extends ApiController
     {
         parent::__construct();
         $this->middleware('scope:read-general')->only('index');
+        $this->middleware('can:view,buyer')->only('show');
     }
 
     /**
@@ -22,6 +23,9 @@ class BuyerController extends ApiController
      */
     public function index()
     {
+
+        $this->allowedAdminAction();
+
         $buyers = Buyer::has('transactions')->get();         // hasMany() used in the relationship function in Buyer model
 
         return $this->showAll($buyers);

@@ -23,6 +23,9 @@ class BuyerSellerController extends ApiController
     public function index(Buyer $buyer)
     {
 
+        $this->allowedAdminAction();
+
+
         // EAGER Loading.
 
         /**  NOTE:
